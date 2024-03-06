@@ -21,11 +21,11 @@ struct mesg {
 
 int error;
 
-#define ERROR(-1)
+#define ERROR (-1)
 #define LABELS 200
 
 int main(int nba, char * arg[]) {
-    printf("main retqrd");
+    printf("main retard");
     struct mesg messageclient, messageServeur, msg_clientStock;
     struct mesg msg_client[LABELS];
     int result, nsend;
@@ -95,7 +95,7 @@ int main(int nba, char * arg[]) {
 
             if (first) {
 
-                printf("je rentre iciiii");
+                //printf("je rentre iciiii");
                 resultsServeur = sendto(clientduServeur, & messageclient, sizeof(messageclient), 0, (struct sockaddr * ) & sockAddrServeur, sizeof(sockAddrServeur));
                 printf("\n jai envoyer au serveur: : label=%d rr=%d rs=%d \n", messageclient.label, resultrServeur, resultsServeur);
                 first = false;
@@ -120,13 +120,14 @@ int main(int nba, char * arg[]) {
                 msg_clientStock.position[kk] = msg_client[index].position[kk];
             //envoyer au client les postions
             resultsServeur = sendto(serveurduClient, & messageServeur, sizeof(messageServeur), 0, (struct sockaddr * ) & sockAddrClient, sizeof(sockAddrClient));
-            printf("\n jai envoyé au client les postions : : label=%d rr=%d rs=%d \n", messageServeur.label, resultrClient, resultsClient);
+            printf("\n jai envoyé au client les postions : %f : label=%d rr=%d rs=%d \n",messageServeur.position[0], messageServeur.label, resultrClient, resultsClient);
+            
             //envoier pour le serveur les position commander 
             resultsServeur = sendto(clientduServeur, & msg_clientStock, sizeof(msg_clientStock), 0, (struct sockaddr * ) & sockAddrServeur, sizeof(sockAddrServeur));
             printf("\n jai envoyer au serveur: : label=%d rr=%d rs=%d  index = %d\n", msg_clientStock.label, resultrServeur, resultsServeur, index);
             index++;
         }
-        printf("\n\n\nfin dq boucle message enregistre: %d\n\n\n", msg_client[j].label);
+        //printf("\n\n\nfin dq boucle message enregistre: %d\n\n\n", msg_client[j-1].label);
 
     }
     while (messageclient.label < 100);

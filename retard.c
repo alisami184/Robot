@@ -41,7 +41,7 @@ int main(int nba, char * arg[]) {
     //int msg_client[LABELS,LABELS];
     double retard[LABELS];
     int index = 0, kk = 0;
-    int j = 0;
+    int j = 0,compteur=0;
 
     struct timeb taux;
     double temps_avant, temps_apres;
@@ -72,13 +72,15 @@ int main(int nba, char * arg[]) {
     fcntl(clientduServeur, F_SETFL, fcntl(clientduServeur, F_GETFL) | O_NONBLOCK);
     fcntl(serveurduClient, F_SETFL, fcntl(serveurduClient, F_GETFL) | O_NONBLOCK);
     printf("la taille c'est %d\n ", sizeof(messageclient));
-
+    
+  
     do {
 
         usleep(Te);
 
         //recevoir du client les positions desirées
         resultrClient = recvfrom(serveurduClient, & messageclient, sizeof(messageclient), 0, (struct sockaddr * ) & sockAddrClient, (socklen_t * ) & longaddrduClient);
+      
         //si on recoit les consignes du client 
         if (resultrClient != -1) {
             //lancer le chrono
@@ -90,30 +92,31 @@ int main(int nba, char * arg[]) {
             msg_client[j].label = messageclient.label;
             for (kk = 0; kk < 6; kk++)
                 msg_client[j].position[kk] = messageclient.position[kk];
+            compteur++;
             j++;
             printf("\n jai recu du client : label=%d rr=%d rs=%d \n", messageclient.label, resultrClient, resultsClient);
 
+            //Si c'est le debut du code il n'a pas des constraint pour envoyer
             if (first) {
-
                 //printf("je rentre iciiii");
                 resultsServeur = sendto(clientduServeur, & messageclient, sizeof(messageclient), 0, (struct sockaddr * ) & sockAddrServeur, sizeof(sockAddrServeur));
                 printf("\n jai envoyer au serveur: : label=%d rr=%d rs=%d \n", messageclient.label, resultrServeur, resultsServeur);
                 first = false;
                 index++;
+                compteur--;
             }
-
-        }
-        // printf("dans label on a : %d, et dans msg_client on a : %d ",messageServeur.label, msg_client[index] );
-        //recevoir du serveur les positions actuelles
+        } //fim do if client
+       
+     
+             //recevoir du serveur les positions actuelles
         resultrServeur = recvfrom(clientduServeur, & messageServeur, sizeof(messageServeur), 0, (struct sockaddr * ) & sockAddrServeur, (socklen_t * ) & longaddrduServeur);
-
         //si on recoit les consignes du server 
-        if (resultrServeur != -1) {
+        if (resultrServeur != -1 ) {
             printf("\n jai recu du serveur: : label=%d rr=%d rs=%d \n", messageServeur.label, resultrServeur, resultsServeur);
 
             ftime( & taux);
             temps_apres = 1000. * taux.time + taux.millitm;
-            printf("\n\n\t\t\t\t\t\tregarde label: %d et mess: %d RETARD entre R et S: %.f\n", messageServeur.label, msg_client[index], temps_apres - retard[index]);
+            printf("\n\n\t\t\t\t\t\tregarde label: %d et mess: %d RETARD entre R et S: %.f\n", messageServeur.label, msg_client[index-1].label, temps_apres - retard[index]);
             //rempli le stock
             msg_clientStock.label = msg_client[index].label;
             for (kk = 0; kk < 6; kk++)
@@ -126,11 +129,35 @@ int main(int nba, char * arg[]) {
             resultsServeur = sendto(clientduServeur, & msg_clientStock, sizeof(msg_clientStock), 0, (struct sockaddr * ) & sockAddrServeur, sizeof(sockAddrServeur));
             printf("\n jai envoyer au serveur: : label=%d rr=%d rs=%d  index = %d\n", msg_clientStock.label, resultrServeur, resultsServeur, index);
             index++;
-        }
+            compteur--;
+        }//fim do if consignes
+        //Si il y a des messages dans la list
+        /*else if (compteur >0)
+               {
+        ftime( & taux);
+            temps_apres = 1000. * taux.time + taux.millitm;
+            printf("\n\n\t\t\t\t\t\tregarde label: %d et mess: %d RETARD entre R et S: %.f\n", messageServeur.label, msg_client[index-1].label, temps_apres - retard[index]);
+            //rempli le stock
+            msg_clientStock.label = msg_client[index].label;
+            for (kk = 0; kk < 6; kk++)
+                msg_clientStock.position[kk] = msg_client[index].position[kk];
+            //envoyer au client les postions
+            resultsServeur = sendto(serveurduClient, & messageServeur, sizeof(messageServeur), 0, (struct sockaddr * ) & sockAddrClient, sizeof(sockAddrClient));
+            printf("\n jai envoyé au client les postions :--: label=%d rr=%d rs=%d \n", messageServeur.label, resultrClient, resultsClient);
+            
+            //envoier pour le serveur les position commander 
+            resultsServeur = sendto(clientduServeur, & msg_clientStock, sizeof(msg_clientStock), 0, (struct sockaddr * ) & sockAddrServeur, sizeof(sockAddrServeur));
+            printf("\n jai envoyer au serveur:--: label=%d rr=%d rs=%d  index = %d\n", msg_clientStock.label, resultrServeur, resultsServeur, index);
+            index++;
+            compteur--;
+
+     }
+            //} //fim do else
+            */
         //printf("\n\n\nfin dq boucle message enregistre: %d\n\n\n", msg_client[j-1].label);
 
-    }
-    while (messageclient.label < 100);
+    } //fim do while
+   while (messageclient.label < 200);
     close(serveurduClient);
     close(clientduServeur);
 

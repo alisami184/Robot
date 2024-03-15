@@ -116,7 +116,7 @@ int main(int argc,char* argv[])
   
 
     // Connection to the server
-    int clientID=simxStart((simxChar*)"162.38.40.128",portNb,true,true,timeOutInMs,commThreadCycleInMs);
+    int clientID=simxStart((simxChar*)"162.38.40.129",portNb,true,true,timeOutInMs,commThreadCycleInMs);
    
     struct mesg message;
     int result, nsend;

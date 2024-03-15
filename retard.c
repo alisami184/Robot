@@ -126,7 +126,7 @@ int main(int nba, char * arg[]) {
             printf("\n jai envoyer au serveur: : label=%d rr=%d rs=%d  index = %d\n", msg_clientStock.label, resultrServeur, resultsServeur, index);
             index++;
         }
-        printf("\n\n\nfin dq boucle message enregistre: %d\n\n\n", msg_client[j].label);
+        //printf("\n\n\nfin dq boucle message enregistre: %d\n\n\n", msg_client[j].label);
 
     }
     while (messageclient.label < 100);

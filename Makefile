@@ -10,7 +10,7 @@ CC=gcc -O3 $(USER_DEFINES)
 # required C files in remoteApi folder:
 #     extApi.c, extApiPlatform.c 
 #
-PATH_VREP=/home/td2/Téléchargements/CoppeliaSim_Edu_V4_5_1_rev4_Ubuntu22_04
+PATH_VREP=/home/mea/Bureau/td2/CoppeliaSim_Edu_V4_5_1_rev4_Ubuntu22_04
 INCLUDE1 = $(PATH_VREP)/programming/include
 INCLUDE2 = $(PATH_VREP)/programming/legacyRemoteApi/remoteApi
 INCLUDE = -I$(INCLUDE1) -I$(INCLUDE2)

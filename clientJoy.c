@@ -73,6 +73,10 @@ int main (int nba, char *arg[]) {
         message.label++;
         message.position[0]=q;
         message.position[1]=q;
+        message.position[2]=q;
+        message.position[3]=q;
+        message.position[4]=q;
+        message.position[5]=q;
 
         tab[j]=message.label;
 
@@ -110,7 +114,8 @@ int main (int nba, char *arg[]) {
         //printf("\n client : \n  label=%d rr=%d rs=%d \n",message.label,resultr, results );
         t=t+0.001;
         //calculer le position
-        q=3*sinf(2*8*3.14/2.5*t);
+        //q=3*sinf(2*8*3.14/2.5*t);
+        q=1;
         j++;
 
     }

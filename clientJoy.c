@@ -19,7 +19,9 @@ struct mesg {
 };
 
 #define ERROR (-1)
-#define LABELS 200
+#define LABELS 5
+#define FLAG 666
+
 int main (int nba, char *arg[]) {
     int result;
     int nsend;
@@ -64,25 +66,32 @@ int main (int nba, char *arg[]) {
     int tab[LABELS];
     double retard[LABELS];
     int index = 0;
+    int compteur = 0,temporaire=0;
     int j=0;
     
     do
     {
         usleep(Te);
 
-        message.label++;
+        //message.label++;
         message.position[0]=q;
         message.position[1]=q;
 
-        tab[j]=message.label;
-
         
 
-        //envoie au retard 
-        results=sendto(serveur,&message,sizeof(message),0,(struct sockaddr*)&sockAddr,sizeof(sockAddr));
-        if(results != -1)
-        printf("\n jai envoyer au retard: : label=%d rs=%d \n",message.label, results );
+         
 
+        //envoie au retard
+        if (compteur <LABELS)
+        {
+            message.label= temporaire;
+            tab[j]=message.label;
+            results=sendto(serveur,&message,sizeof(message),0,(struct sockaddr*)&sockAddr,sizeof(sockAddr));
+            compteur ++ ;
+                if(results != -1)
+        printf("\n Consigne Client : label=%d rs=%d \n",message.label, results);
+        printf("\n Envoyer des consignes number = %d \n", compteur);
+        }
 
         //lancer le chrono
         ftime(&taux); 
@@ -112,9 +121,17 @@ int main (int nba, char *arg[]) {
         //calculer le position
         q=3*sinf(2*8*3.14/2.5*t);
         j++;
+        temporaire++;
+        //dernier recu on envoyer le flag
+        if (index==LABELS-1)
+        {
+             message.label= FLAG;
+            results=sendto(serveur,&message,sizeof(message),0,(struct sockaddr*)&sockAddr,sizeof(sockAddr));
+
+        }
 
     }
-    while(message.label<100);
+    while(message.label != FLAG);
 
     close(serveur);
 

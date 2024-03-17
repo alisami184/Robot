@@ -25,9 +25,6 @@ int error;
 #define LABELS 20
 #define FLAG 666
 
-
-
-
 int main(int nba, char * arg[]) {
     printf("main retard");
     struct mesg messageclient, messageServeur, msg_clientStock;
@@ -77,9 +74,6 @@ int main(int nba, char * arg[]) {
     fcntl(serveurduClient, F_SETFL, fcntl(serveurduClient, F_GETFL) | O_NONBLOCK);
     printf("la taille c'est %d\n ", sizeof(messageclient));
 
-
-
-
     do {
 
         usleep(Te);
@@ -106,9 +100,6 @@ int main(int nba, char * arg[]) {
         
             printf("\n Consigne Client : label=%d rr=%d rs=%d \n", messageclient.label, resultrClient, resultsClient);  //console
 
-      
-
-
             //Pour la premiere commande client , on l'envoie directement au serveur
             if (first) {
 
@@ -123,9 +114,7 @@ int main(int nba, char * arg[]) {
             }
         }
 
-
-       
-     
+ 
         //On ecoute le serveur
         resultrServeur = recvfrom(clientduServeur, & messageServeur, sizeof(messageServeur), 0, (struct sockaddr * ) & sockAddrServeur, (socklen_t * ) & longaddrduServeur);
 
@@ -143,14 +132,10 @@ int main(int nba, char * arg[]) {
             //on a recu un label du serveur, et on calcul le retard
             printf("\n\n\t\t\t\t\t\tregarde label: %d et mess: %d RETARD entre R et S: %.f\n", messageServeur.label, msg_client[index-1].label, temps_apres - retard[index-1]);  //console
 
-
-
             //envoyer au client les postions
             resultsServeur = sendto(serveurduClient, & messageServeur, sizeof(messageServeur), 0, (struct sockaddr * ) & sockAddrClient, sizeof(sockAddrClient));
 
             printf("\n Retour Client  :  label=%d rr=%d rs=%d \n", messageServeur.label, resultrClient, resultsClient); //console
-
-
 
              //envoier pour le serveur les position commander 
             resultsServeur = sendto(clientduServeur, & msg_client[index], sizeof(messageServeur), 0, (struct sockaddr * ) & sockAddrServeur, sizeof(sockAddrServeur));

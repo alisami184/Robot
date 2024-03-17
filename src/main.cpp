@@ -1,6 +1,4 @@
-//
 //   C++ - VREP API for manipulator Robotis H
-//
 
 #include <iostream>
 #include <stdio.h>
@@ -107,7 +105,6 @@ int SetJointPos(int clientID, float *q)
 }
 
 
-
 int main(int argc,char* argv[])
 {
     int portNb=5555; // the port number where to connect
@@ -140,7 +137,6 @@ int main(int argc,char* argv[])
         exit(1);
     }
     
- 
 
     results=ERROR;
     resultr=ERROR;
@@ -204,4 +200,3 @@ int main(int argc,char* argv[])
 
     return(0);
 }
-

@@ -104,7 +104,7 @@ int main (int nba, char *arg[]) {
             
              ftime(&taux); 
              temps_apres = 1000. * taux.time + taux.millitm;
-             printf("\n\n\t\t\t\t\t\tregarde label: %d et mess: %d RETARD: %.f\n" ,message.label,tab[index], temps_apres-retard[index]);
+             printf("\n\n\t\t\t\t\tregarde label: %d et messqge: %d RETARD: %.f\n" ,message.label,tab[index], temps_apres-retard[index]);
              //temps_avant = temps_apres; //enregistre le temp de apres comment nouveau debut
              //labelEnvoyer++;
              index ++;
